@@ -154,6 +154,7 @@ namespace GitReporter
             }
 
             pgb1.Visible = false;
+            pgb1.Value = 0;
         }
     }
 }
