@@ -55,6 +55,7 @@
             this.btnBrowse = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.pgb1 = new System.Windows.Forms.ProgressBar();
+            this.chkShowDescription = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRepos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ds)).BeginInit();
@@ -266,11 +267,22 @@
             this.pgb1.Size = new System.Drawing.Size(775, 23);
             this.pgb1.TabIndex = 15;
             // 
+            // chkShowDescription
+            // 
+            this.chkShowDescription.AutoSize = true;
+            this.chkShowDescription.Location = new System.Drawing.Point(15, 316);
+            this.chkShowDescription.Name = "chkShowDescription";
+            this.chkShowDescription.Size = new System.Drawing.Size(105, 17);
+            this.chkShowDescription.TabIndex = 16;
+            this.chkShowDescription.Text = "show description";
+            this.chkShowDescription.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.chkShowDescription);
             this.Controls.Add(this.pgb1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnBrowse);
@@ -325,6 +337,7 @@
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ProgressBar pgb1;
+        private System.Windows.Forms.CheckBox chkShowDescription;
     }
 }
 

@@ -79,6 +79,14 @@ namespace GitReporter
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
+            string author = txtAuthor.Text;
+
+            if (string.IsNullOrEmpty(author))
+            {
+                MessageBox.Show("Please input author");
+                return;
+            }
+
             pgb1.Maximum = tblRepos.Rows.Count;
             pgb1.Visible = true;
             System.Diagnostics.Process process = new System.Diagnostics.Process();
@@ -90,9 +98,8 @@ namespace GitReporter
             startInfo.FileName = "cmd.exe";
 
             string gitCmd = "";
-            string echoCmd = "";
+            string gitFormat = "";
             string repos = "";
-            string author = txtAuthor.Text;
             string fromDate = dtpFrom.Value.ToString("yyyy-MM-dd 00:00:00");
             string toDate = dtpTo.Value.ToString("yyyy-MM-dd 23:59:59");
             string outputFileName = txtOutputFileFolder.Text + "\\git_report_" + dtpFrom.Value.ToString("yyyyMMdd") + "_to_" + dtpTo.Value.ToString("yyyyMMdd") + ".txt";
@@ -109,26 +116,28 @@ namespace GitReporter
                 file.WriteLine("Git Report From " + dtpFrom.Value.ToString("yyyy-MM-dd") + " to " + dtpTo.Value.ToString("yyyy-MM-dd"));
                 foreach (DataRow row in tblRepos.Rows)
                 {
-                    //pgbIncrement(1);
                     pgb1.Value++;
+
                     // /C means carries out with the process command, otherwise it will stop running.
-                    echoCmd = "/C echo [" + row["Name"].ToString() + "]";
                     gitCmd = "/C";
 
                     // Get repos path
                     repos = row["Path"].ToString();
 
-                    if (!(string.IsNullOrEmpty(repos) || string.IsNullOrEmpty(author)))
+                    if (!(string.IsNullOrEmpty(repos)))
                     {
                         gitCmd += " git -C \"" + repos + "\"";
-                        gitCmd += " log --author=\"" + author + "\" --since=\"" + fromDate + "\" --until=\"" + toDate + "\" --no-merges --reverse --format=\" * % s\"";
+                        gitCmd += " log --author=\"" + author + "\" --since=\"" + fromDate + "\" --until=\"" + toDate + "\" --no-merges --reverse";
+                        gitFormat = " --format=\" * %s\"";
+
+                        if (chkShowDescription.Checked)
+                        {
+                            gitFormat = " --format=\"* %s -- %b\"";
+                        }
+                        gitCmd += gitFormat;
 
                         // Get project name as header
-                        startInfo.Arguments = echoCmd;
-                        process.StartInfo = startInfo;
-                        process.Start();
-                        header = process.StandardOutput.ReadToEnd();
-                        process.WaitForExit();
+                        header = "[" + row["Name"].ToString() + "]";
 
                         // Get git log info
                         startInfo.Arguments = gitCmd;
@@ -140,7 +149,7 @@ namespace GitReporter
                         // Write to output file
                         if (!string.IsNullOrEmpty(result))
                         {
-                            file.Write(header);
+                            file.WriteLine(header);
                             file.Write(result);
                             file.WriteLine();
                         }
